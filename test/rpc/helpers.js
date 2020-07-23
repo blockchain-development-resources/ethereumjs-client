@@ -6,6 +6,7 @@ const Manager = require('../../lib/rpc')
 const Logger = require('../../lib/logging')
 const blockChain = require('./blockChainStub.js')
 const Chain = require('../../lib/blockchain/chain.js')
+const RlpxServer = require('../../lib/net/server/rlpxserver')
 
 const config = { loglevel: 'error' }
 config.logger = Logger.getLogger(config)
@@ -31,6 +32,11 @@ module.exports = {
     chain.opened = true
     const defaultNodeConfig = { blockchain: chain, opened: true, commonChain: new Common('mainnet'), ethProtocolVersions: [63] }
     const trueNodeConfig = { ...defaultNodeConfig, ...nodeConfig }
+    const servers = [
+      new RlpxServer({
+        bootnodes: '10.0.0.1:1234,10.0.0.2:1234'
+      })
+    ]
     return {
       services: [
         {
@@ -43,8 +49,12 @@ module.exports = {
           }]
         }
       ],
+      servers,
       common: trueNodeConfig.commonChain,
-      opened: trueNodeConfig.opened
+      opened: trueNodeConfig.opened,
+      server: (name) => {
+        return servers.find(s => s.name === name)
+      }
     }
   },
 
