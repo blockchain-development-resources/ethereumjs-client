@@ -5,7 +5,6 @@ const { startRPC, createManager, createNode, params, baseRequest } = require('..
 const method = 'admin_nodeInfo'
 
 test(method, (t) => {
-
   const manager = createManager(createNode({ opened: true }))
   const server = startRPC(manager.getMethods())
 
@@ -14,11 +13,10 @@ test(method, (t) => {
   const expectRes = res => {
     const { result } = res.body
     if (result) {
-      t.pass(msg)
+      t.pass('admin_nodeInfo returns a value')
     } else {
       throw new Error(msg)
     }
   }
   baseRequest(t, server, req, 200, expectRes)
-});
-
+})
