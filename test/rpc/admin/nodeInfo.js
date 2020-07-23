@@ -15,7 +15,7 @@ test(method, (t) => {
     if (result) {
       t.pass('admin_nodeInfo returns a value')
     } else {
-      throw new Error(msg)
+      throw new Error('no return value')
     }
   }
   baseRequest(t, server, req, 200, expectRes)
